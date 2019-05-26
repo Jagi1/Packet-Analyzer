@@ -19,11 +19,11 @@ fun main() = Socket("localhost", 11000).run {
     pw.println(datagramIPV4)
 //    pw.println(datagramTCP)
     var datagramReceived: String? = ""
-    var line: String? = br.readLine().replace(" ", "")
+    var line: String? = br.readLine()
     while (line != null) {
         datagramReceived += line
         System.out.println(line)
-        line = br.readLine()?.replace(" ", "")
+        line = br.readLine()
     }
     pw.close()
     br.close()
