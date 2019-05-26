@@ -3,7 +3,6 @@ package analizator
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import java.lang.IllegalStateException
 import java.net.Socket
 
 fun main() = Socket("localhost", 11000).run {
@@ -21,14 +20,10 @@ fun main() = Socket("localhost", 11000).run {
 //    pw.println(datagramTCP)
     var datagramReceived: String? = ""
     var line: String? = br.readLine().replace(" ", "")
-    try {
-        while (line != null) {
-            datagramReceived += line
-            System.out.println(line)
-            line = br.readLine().replace(" ", "")
-        }
-    } catch (e: IllegalStateException) {
-
+    while (line != null) {
+        datagramReceived += line
+        System.out.println(line)
+        line = br.readLine()?.replace(" ", "")
     }
     pw.close()
     br.close()
