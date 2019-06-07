@@ -6,7 +6,7 @@ import kotlin.math.pow
  * It converts [bytes] into [Int] value.
  * Example: 00011100 = 8 + 16 + 32 = 56
  * */
-fun bytesToDouble(bytes: String): Int {
+fun bytesToInt(bytes: String): Int {
     var value = 0.0
     var iter = 0
     bytes.reversed().forEach {

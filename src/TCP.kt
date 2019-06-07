@@ -2,7 +2,30 @@ package analizator
 
 import java.io.PrintWriter
 
-fun analyzeTCP(pw: PrintWriter, datagram: String?) = datagram?.let {
+/**
+ * This method decode [header] of TCP protocol and sends back it decoded to client with [PrintWriter].
+ *
+ * TCP header structure:
+ *   Source port --------------------- 2 bytes - header range 0....3
+ *   Destination port ---------------- 2 bytes - header range 4....7
+ *   Sequence number ----------------- 4 bytes - header range 8...15
+ *   Acknowledge number -------------- 4 bytes - header range 16..23
+ *   Offset -------------------------- 4 bits -- header range 24..24
+ *   Reserved ------------------------ 3 bits -- header range 24..24
+ *   ECN-nonce (NS) ------------------ 1 bit --- header range 24..24
+ *   Congestion Window Reduced (CWR) - 1 bit --- header range 25..25
+ *   ECN-echo (ECE) ------------------ 1 bit --- header range 25..25
+ *   Urgent pointer (URG) ------------ 1 bit --- header range 25..25
+ *   Acknowledgement (ACK) ----------- 1 bit --- header range 25..25
+ *   Push function (PSH) ------------- 1 bit --- header range 26..26
+ *   Reset (RST) --------------------- 1 bit --- header range 26..26
+ *   Synchronize (SYN) --------------- 1 bit --- header range 26..26
+ *   Last packet (FIN) --------------- 1 bit --- header range 26..26
+ *   Window size --------------------- 2 bytes - header range 27..30
+ *   Checksum ------------------------ 2 bytes - header range 31..34
+ *   Urgent pointer ------------------ 2 bytes - header range 35..38
+ * */
+fun analyzeTCP(pw: PrintWriter, header: String?) = header?.let {
     var response = "Analyzed TCP header:\n"
     val sPort = "${it[0]}${it[1]}${it[2]}${it[3]}".toInt(16)
     val dPort = "${it[4]}${it[5]}${it[6]}${it[7]}".toInt(16)
@@ -19,7 +42,8 @@ fun analyzeTCP(pw: PrintWriter, datagram: String?) = datagram?.let {
     val reset = "${hexToBytes("${it[26]}")[1]}"
     val syn = "${hexToBytes("${it[26]}")[2]}"
     val fin = "${hexToBytes("${it[26]}")[3]}"
-    val windowSize = "${it[27]}${28}${29}${30}".toInt(16)
+    val windowSize = "${it[27]}${it[28]}${it[29]}${it[30]}".toInt(16)
+    val checkSum = "0x${it[31]}${it[32]}${it[33]}${34}"
     val urgentPointer = "${it[35]}${it[36]}${it[37]}${it[38]}".toInt(16)
     response += "    Source port: $sPort\n"
     response += "    Destination port: $dPort\n"
@@ -68,7 +92,7 @@ fun analyzeTCP(pw: PrintWriter, datagram: String?) = datagram?.let {
         else -> "    .... .... ...$fin = Fin: Set\n"
     }
     response += "    Window size value: $windowSize\n"
-    response += "    Checksum: 0x${it[31]}${it[32]}${it[33]}${it[34]}\n"
+    response += "    Checksum: $checkSum\n"
     response += "    Urgent pointer: $urgentPointer\n"
     pw.println(response)
 }
