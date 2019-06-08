@@ -12,17 +12,17 @@ import java.io.PrintWriter
  * */
 fun analyzeEthernetII(pw: PrintWriter, header: String): String {
     var response = "Analyzed EthernetII header:\n"
-    val dAddress = "${header[0]}${header[1]}:${header[2]}${header[3]}:${header[4]}${header[5]}${header[6]}${header[7]}:${header[8]}${header[9]}:${header[10]}${header[11]}"
-    val sAddress = "${header[12]}${header[13]}:${header[14]}${header[15]}:${header[16]}${header[17]}${header[18]}${header[19]}:${header[20]}${header[21]}:${header[22]}${header[23]}"
-    val etherType = "0x${header[24]}${header[25]}${header[26]}${header[27]}"
+    val dAddress = header.substring(0, 12).chunked(2).joinToString(separator = ":")
+    val sAddress = header.substring(12, 24).chunked(2).joinToString(separator = ":")
+    val etherType = header.substring(24, 28)
     response += "    Destination address: $dAddress\n"
     response += "    Source address: $sAddress\n"
-    response += "    EtherType: $etherType\n"
+    response += "    EtherType: 0x$etherType\n"
     pw.println(response)
     return when (etherType) {
-        "0x0800" -> "ipv4"
-        "0x86dd" -> "ipv6"
-        "0x0806" -> "arp"
+        "0800" -> "ipv4"
+        "86dd" -> "ipv6"
+        "0806" -> "arp"
         else -> ""
     }
 }

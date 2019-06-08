@@ -27,24 +27,24 @@ import java.io.PrintWriter
  * */
 fun analyzeTCP(pw: PrintWriter, header: String?) = header?.let {
     var response = "Analyzed TCP header:\n"
-    val sPort = "${it[0]}${it[1]}${it[2]}${it[3]}".toInt(16)
-    val dPort = "${it[4]}${it[5]}${it[6]}${it[7]}".toInt(16)
-    val seqNumber = "${it[8]}${it[9]}${it[10]}${it[11]}${it[12]}${it[13]}${it[14]}${it[15]}".toLong(16)
-    val ackNumber = "${it[16]}${it[17]}${it[18]}${it[19]}${it[20]}${it[21]}${it[22]}${it[23]}".toLong(16)
-    val offset = "${it[24]}".toInt(16)
-    val reserved = arrayListOf(hexToBytes("${it[24]}")[0], hexToBytes("${it[24]}")[1], hexToBytes("${it[24]}")[2])
-    val nonce = "${hexToBytes("${it[24]}")[3]}"
-    val congestion = "${hexToBytes("${it[25]}")[0]}"
-    val ecnEcho = "${hexToBytes("${it[25]}")[1]}"
-    val urgent = "${hexToBytes("${it[25]}")[2]}"
-    val acknowledgement = "${hexToBytes("${it[25]}")[3]}"
-    val push = "${hexToBytes("${it[26]}")[0]}"
-    val reset = "${hexToBytes("${it[26]}")[1]}"
-    val syn = "${hexToBytes("${it[26]}")[2]}"
-    val fin = "${hexToBytes("${it[26]}")[3]}"
-    val windowSize = "${it[27]}${it[28]}${it[29]}${it[30]}".toInt(16)
-    val checkSum = "0x${it[31]}${it[32]}${it[33]}${34}"
-    val urgentPointer = "${it[35]}${it[36]}${it[37]}${it[38]}".toInt(16)
+    val sPort = it.substring(0, 4).toInt(16)
+    val dPort = it.substring(4, 8).toInt(16)
+    val seqNumber = it.substring(8, 16).toLong(16)
+    val ackNumber = it.substring(16, 24).toLong(16)
+    val offset = it[24].toString().toInt(16)
+    val reserved = hexToBytes(it[24].toString()).substring(0, 3)
+    val nonce = hexToBytes(it[24].toString())[3].toString()
+    val congestion = hexToBytes(it[25].toString())[0].toString()
+    val ecnEcho = hexToBytes(it[25].toString())[1].toString()
+    val urgent = hexToBytes(it[25].toString())[2].toString()
+    val acknowledgement = hexToBytes(it[25].toString())[3].toString()
+    val push = hexToBytes(it[26].toString())[0].toString()
+    val reset = hexToBytes(it[26].toString())[1].toString()
+    val syn = hexToBytes(it[26].toString())[2].toString()
+    val fin = hexToBytes(it[26].toString())[3].toString()
+    val windowSize = it.substring(26, 31).toInt(16)
+    val checkSum = it.substring(31, 35)
+    val urgentPointer = it.substring(35, 39).toInt(16)
     response += "    Source port: $sPort\n"
     response += "    Destination port: $dPort\n"
     response += "    Sequence number: $seqNumber\n"
@@ -92,7 +92,7 @@ fun analyzeTCP(pw: PrintWriter, header: String?) = header?.let {
         else -> "    .... .... ...$fin = Fin: Set\n"
     }
     response += "    Window size value: $windowSize\n"
-    response += "    Checksum: $checkSum\n"
+    response += "    Checksum: 0x$checkSum\n"
     response += "    Urgent pointer: $urgentPointer\n"
     pw.println(response)
 }

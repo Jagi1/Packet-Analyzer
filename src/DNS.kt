@@ -1,6 +1,5 @@
 package analizator
 
-import sun.security.util.Length
 import java.io.PrintWriter
 
 /**

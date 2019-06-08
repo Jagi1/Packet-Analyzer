@@ -23,17 +23,17 @@ import java.io.PrintWriter
 
 fun analyzeIPV4(pw: PrintWriter, header: String): String {
     var response = "Analyzed IPv4 header:\n"
-    val version = "${header[0]}".toInt(16)
-    val ihl = "${header[1]}".toInt(16)
-    val length = "${header[4]}${header[5]}${header[6]}${header[7]}".toInt(16)
-    val id = "${header[8]}${header[9]}${header[10]}${header[11]}".toInt(16)
-    val flags = hexToBytes("${header[12]}")
-    val fOffset = "${hexToBytes("${header[12]}")[3]} ${hexToBytes("${header[13]}")} ${hexToBytes("${header[14]}")} ${hexToBytes("${header[15]}")}"
-    val ttl = "${bytesToInt("${hexToBytes("${header[16]}")}${hexToBytes("${header[17]}")}")}"
-    val protocol = "${bytesToInt("${hexToBytes("${header[18]}")}${hexToBytes("${header[19]}")}")}"
-    val headerChecksum = "${header[20]}${header[21]}${header[22]}${header[23]}"
-    val source = "${"${header[24]}${header[25]}".toInt(16)}.${"${header[26]}${header[27]}".toInt(16)}.${"${header[28]}${header[29]}".toInt(16)}.${"${header[30]}${header[31]}".toInt(16)}"
-    val destination = "${"${header[32]}${header[33]}".toInt(16)}.${"${header[34]}${header[35]}".toInt(16)}.${"${header[36]}${header[37]}".toInt(16)}.${"${header[38]}${header[39]}".toInt(16)}"
+    val version = header.substring(0, 1).toInt(16)
+    val ihl = header.substring(1, 2).toInt(16)
+    val length = header.substring(4, 8).toInt(16)
+    val id = header.substring(8, 12).toInt(16)
+    val flags = hexToBytes(header.substring(12 ,13))
+    val fOffset = hexToBytes(header[12].toString())[3] + " " + header.substring(13, 16).chunked(1).map { it }.joinToString { hexToBytes(it) }
+    val ttl = bytesToInt(hexToBytes(header[16].toString()) + hexToBytes(header[17].toString()))
+    val protocol = bytesToInt(hexToBytes(header[18].toString()) + hexToBytes(header[19].toString())).toString()
+    val headerChecksum = header.substring(20, 24)
+    val source = header.substring(24, 32).chunked(2).map { it.toInt(16) }.joinToString(separator = ".")
+    val destination = header.substring(32, 40).chunked(2).map { it.toInt(16) }.joinToString(separator = ".")
     response += "    Version: $version\n"
     response += "    IHL: $ihl\n"
     response += "    Total length: $length\n"

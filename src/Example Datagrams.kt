@@ -78,3 +78,8 @@ val UDP_DNS_query = "9b 74 00 35 00 2f dd bb $DNS_query"
 val L2TP = "c8 02 00 2a 05 f7 00 00 00 01 00 01 80 08 00 00 " +
         "00 00 00 03 80 16 00 00 00 0d 01 dc 48 5b 13 ea " +
         "cb 71 a3 8f a9 dd 2a 74 fc be"
+
+val ethernetII_ARP = "ff ff ff ff ff ff 00 07 0d af f4 54 " +
+        "08 06 00 01 08 00 06 04 00 01 00 07 0d af f4 54 " +
+        "18 a6 ac 01 00 00 00 00 00 00 18 a6 ae ed 03 01 " +
+        "04 00 00 00 00 02 01 00 03 02 00 00 05 01 03 01"
