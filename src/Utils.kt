@@ -40,3 +40,27 @@ fun hexToBytes(hex: String): String =
         "e" -> "1110"
         else -> "1111"
     }
+
+fun hexToByteString(hexStr: String) : String {
+    val output = StringBuilder("")
+    var i = 0
+    while (i < hexStr.length) {
+        output.append(hexToBytes(hexStr.substring(i, i + 1)))
+        i += 1
+    }
+
+    return output.toString()
+}
+
+fun hexToASCII(hexStr: String): String {
+    val output = StringBuilder("")
+
+    var i = 0
+    while (i < hexStr.length) {
+        val str = hexStr.substring(i, i + 2)
+        output.append(Integer.parseInt(str, 16).toChar())
+        i += 2
+    }
+
+    return output.toString()
+}

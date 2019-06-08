@@ -17,6 +17,13 @@ fun main() = ServerSocket(11000).run {
         val br = BufferedReader(InputStreamReader(socket.getInputStream()))
         // Packet to decode
         val packet: String? = br.readLine().replace(" ", "")
+        println(packet)
+        val length = analyzeL2TP(pw, packet!!)
+//        val length = analyzeUDP(pw, packet!!.substring(0, 16))
+//        println(length)
+//        val responseDNS = analyzeDNS(pw, packet!!.substring(16, packet.length), length)
+
+        /*
         // Decode header and get next protocol (if exists)
         val layer3Protocol = analyzeEthernetII(pw, packet!!.substring(0, 28))
         // Decide which protocol should be decoded next
@@ -40,6 +47,7 @@ fun main() = ServerSocket(11000).run {
             }
 //            "arp" -> analyzeARP(pw, datagram.substring(28, ?))
         }
+        */
         // Closing connection
         pw.close()
         br.close()
