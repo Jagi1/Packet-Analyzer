@@ -1,5 +1,6 @@
 package analizator
 
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -19,6 +20,9 @@ fun analyzeEthernetII(pw: PrintWriter, header: String): String {
     response += "    Source address: $sAddress\n"
     response += "    EtherType: 0x$etherType\n"
     pw.println(response)
+    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+        appendText("EthernetII: $header\n$response\n", Charsets.UTF_8)
+    }
     return when (etherType) {
         "0800" -> "ipv4"
         "86dd" -> "ipv6"

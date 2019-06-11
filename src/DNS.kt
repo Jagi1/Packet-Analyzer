@@ -1,5 +1,6 @@
 package analizator
 
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -60,6 +61,9 @@ fun analyzeDNS(pw: PrintWriter, header: String, length: Int): Int {
 //    response += "   Authoritative: $authority\n"
 //    response += "   Additionals: $additional\n"
     pw.println(response)
+    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+        appendText("DNS: $header\n$response\n", Charsets.UTF_8)
+    }
     return 1
 }
 

@@ -1,5 +1,6 @@
 package analizator
 
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -50,5 +51,8 @@ fun analyzeARP(pw: PrintWriter, header: String): Int {
     response += "    Target MAC address: $tha\n"
     response += "    Target IP address: $tpa\n"
     pw.println(response)
+    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+        appendText("ARP: $header\n$response\n", Charsets.UTF_8)
+    }
     return 1
 }

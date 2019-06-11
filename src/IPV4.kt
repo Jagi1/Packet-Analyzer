@@ -1,5 +1,6 @@
 package analizator
 
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -61,6 +62,9 @@ fun analyzeIPV4(pw: PrintWriter, header: String): String {
     response += "    Source: $source\n"
     response += "    Destination: $destination\n"
     pw.println(response)
+    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+        appendText("IPV4: $header\n$response\n", Charsets.UTF_8)
+    }
     return when (protocol) {
         "17" -> "udp"
         "6" -> "tcp"

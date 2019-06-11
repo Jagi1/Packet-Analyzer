@@ -2,6 +2,8 @@ package analizator
 
 import kotlin.math.pow
 
+val projectPath = System.getProperty("user.dir")!!
+
 /**
  * It converts [bytes] into [Int] value.
  * Example: 00011100 = 8 + 16 + 32 = 56

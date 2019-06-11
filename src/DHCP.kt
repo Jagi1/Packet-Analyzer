@@ -1,5 +1,6 @@
 package analizator
 
+import java.io.File
 import java.io.PrintWriter
 
 
@@ -63,5 +64,8 @@ fun analyzeDHCP(pw: PrintWriter, header: String): Int {
     response += "   Magic cookie: $magicCookie\n"
     //response += "   Producent options: $restOptions\n"
     pw.println(response)
+    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+        appendText("DHCP: $header\n$response\n", Charsets.UTF_8)
+    }
     return 1
 }

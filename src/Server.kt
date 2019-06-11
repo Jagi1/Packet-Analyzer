@@ -14,7 +14,6 @@ import java.time.LocalDateTime
  * which is decoded with another method. Same process is repeated until all headers have been decoded.
  * */
 fun main() = ServerSocket(11000).run {
-    val projectPath = System.getProperty("user.dir")
     accept().let { socket ->
         File("$projectPath\\src\\logs\\Connections.txt").run {
             appendText("${LocalDateTime.now()}_$socket\n", Charsets.UTF_8)

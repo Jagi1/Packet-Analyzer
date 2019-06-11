@@ -1,5 +1,6 @@
 package analizator
 
+import java.io.File
 import java.io.PrintWriter
 
 /**
@@ -107,5 +108,8 @@ fun analyzeL2TP(pw: PrintWriter, header: String): Int {
     }
     response += "\t\tData:\n$dataList"
     pw.println(response)
+    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+        appendText("L2TP: $header\n$response\n", Charsets.UTF_8)
+    }
     return 1
 }
