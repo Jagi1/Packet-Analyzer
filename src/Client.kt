@@ -15,7 +15,7 @@ fun main() = Socket("localhost", 11000).run {
     val br = BufferedReader(InputStreamReader(getInputStream()))
     // Send packet to decode
 //    pw.println(ethernetII_IPV4_TCP)
-    pw.println(ethernetII_IPV6)
+    pw.println(ethernetII_IPV6_bin)
     // Receive decoded packet
     getResponse(br)
     // Close connection

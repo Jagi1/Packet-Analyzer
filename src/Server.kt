@@ -1,9 +1,12 @@
 package analizator
 
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.ServerSocket
+import java.nio.charset.Charset
+import java.time.LocalDateTime
 
 /**
  * After establishing connection with client, packet is received with [BufferedReader].
@@ -12,13 +15,22 @@ import java.net.ServerSocket
  * */
 fun main() = ServerSocket(11000).run {
     accept().let { socket ->
+        File("C:\\Users\\Bandu\\IdeaProjects\\Packet-Analyzer\\src\\logs\\Connections.txt").run {
+            appendText("${LocalDateTime.now()}_$socket\n", Charsets.UTF_8)
+        }
         // Create two-way communication (pw for sending and br for reading)
         val pw = PrintWriter(socket.getOutputStream(), true)
         val br = BufferedReader(InputStreamReader(socket.getInputStream()))
         // Packet to decode
-        val packet: String? = br.readLine().replace(" ", "")
+        var packet: String? = br.readLine().replace(" ", "")
+        if (checkBinOrHex(packet!!) == 1) {
+            packet = convertPacketBinToHex(packet).replace(", ", "")
+        }
+        File("C:\\Users\\Bandu\\IdeaProjects\\Packet-Analyzer\\src\\logs\\PacketsReceived.txt").run {
+            appendText("${socket}_$packet\n", Charsets.UTF_8)
+        }
         // Decode header and get next protocol (if exists)
-        val layer3Protocol = analyzeEthernetII(pw, packet!!.substring(0, 28))
+        val layer3Protocol = analyzeEthernetII(pw, packet.substring(0, 28))
         // Decide which protocol should be decoded next
         when (layer3Protocol) {
             "ipv4" -> {

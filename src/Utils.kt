@@ -41,7 +41,30 @@ fun hexToBytes(hex: String): String =
         else -> "1111"
     }
 
-fun hexToByteString(hexStr: String) : String {
+/**
+ * Converts [bytes] into hex as [String].
+ * */
+fun bytesToHex(bytes: String): String =
+    when (bytes.toLowerCase()) {
+        "0000" -> "0"
+        "0001" -> "1"
+        "0010" -> "2"
+        "0011" -> "3"
+        "0100" -> "4"
+        "0101" -> "5"
+        "0110" -> "6"
+        "0111" -> "7"
+        "1000" -> "8"
+        "1001" -> "9"
+        "1010" -> "a"
+        "1011" -> "b"
+        "1100" -> "c"
+        "1101" -> "d"
+        "1110" -> "e"
+        else -> "f"
+    }
+
+fun hexToByteString(hexStr: String): String {
     val output = StringBuilder("")
     var i = 0
     while (i < hexStr.length) {
@@ -63,4 +86,27 @@ fun hexToASCII(hexStr: String): String {
     }
 
     return output.toString()
+}
+
+/**
+ * Converts [packet] from binary type to hexadecimal type.
+ * */
+fun convertPacketBinToHex(packet: String): String =
+    packet.chunked(4).joinToString { bytesToHex(it) }
+
+fun convertPacketHexToBin(packet: String): String =
+        packet.chunked(1).joinToString { hexToBytes(it) }
+
+/**
+ * This function checks if packet was sent is binary or hexadecimal.
+ * It returns [Int]:
+ * - 0 - packet is hexadecimal type
+ * - 1 - packet is binary type
+ * */
+fun checkBinOrHex(packet: String): Int {
+    packet.forEach {
+        if (it == '0' || it == '1') { }
+        else return 0
+    }
+    return 1
 }
