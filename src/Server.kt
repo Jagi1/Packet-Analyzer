@@ -14,8 +14,9 @@ import java.time.LocalDateTime
  * which is decoded with another method. Same process is repeated until all headers have been decoded.
  * */
 fun main() = ServerSocket(11000).run {
+    val projectPath = System.getProperty("user.dir")
     accept().let { socket ->
-        File("C:\\Users\\Bandu\\IdeaProjects\\Packet-Analyzer\\src\\logs\\Connections.txt").run {
+        File("$projectPath\\src\\logs\\Connections.txt").run {
             appendText("${LocalDateTime.now()}_$socket\n", Charsets.UTF_8)
         }
         // Create two-way communication (pw for sending and br for reading)
@@ -26,7 +27,7 @@ fun main() = ServerSocket(11000).run {
         if (checkBinOrHex(packet!!) == 1) {
             packet = convertPacketBinToHex(packet).replace(", ", "")
         }
-        File("C:\\Users\\Bandu\\IdeaProjects\\Packet-Analyzer\\src\\logs\\PacketsReceived.txt").run {
+        File("$projectPath\\src\\logs\\PacketsReceived.txt").run {
             appendText("${socket}_$packet\n", Charsets.UTF_8)
         }
         // Decode header and get next protocol (if exists)
