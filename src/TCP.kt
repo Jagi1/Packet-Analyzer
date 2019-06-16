@@ -96,7 +96,5 @@ fun analyzeTCP(pw: PrintWriter, header: String?) = header?.let {
     response += "    Checksum: 0x$checkSum\n"
     response += "    Urgent pointer: $urgentPointer\n"
     pw.println(response)
-    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
-        appendText("TCP: $header\n$response\n", Charsets.UTF_8)
-    }
+    logDecoding(header, response)
 }

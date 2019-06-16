@@ -24,8 +24,6 @@ fun analyzeUDP(pw: PrintWriter, header: String): Int {
     response += "    Length: $length\n"
     response += "    Checksum: $checkSum\n"
     pw.println(response)
-    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
-        appendText("UDP: $header\n$response\n", Charsets.UTF_8)
-    }
+    logDecoding(header, response)
     return length
 }

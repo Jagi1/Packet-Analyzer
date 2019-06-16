@@ -1,0 +1,78 @@
+EthernetII: b46bfc8dcd5e0000ca11223386dd
+Analyzed EthernetII header:
+    Destination address: b4:6b:fc:8d:cd:5e
+    Source address: 00:00:ca:11:22:33
+    EtherType: 0x86dd
+
+
+IPV6: 6000000000003b00fe80000000000000708dfe834114a5122001000041379e508000f12ab9c82815
+Analyzed IPv6 header:
+    0110 .... = Version 6
+    .... 0000 0000 .... .... .... .... .... = Traffic Class 0x00
+    .... 0000 00.. .... .... .... .... .... = Differentiated Services Codepoint: 0
+    .... .... ..00 .... .... .... .... .... = Explicit Congestion Notification: 0
+    .... .... .... 0000 0000 0000 0000 0000 = Flow Label: 0x00000
+    Payload length: 0
+    Next header: 59
+    Hop limit: 0
+    Source: fe:80:00:00:00:00:00:00:70:8d:fe:83:41:14:a5:12
+    Destination: 20:01:00:00:41:37:9e:50:80:00:f1:2a:b9:c8:28:15
+
+
+DHCP: b46bfc8dcd5e0000ca11223386dd
+Analyzed EthernetII header:
+    Destination address: b4:6b:fc:8d:cd:5e
+    Source address: 00:00:ca:11:22:33
+    EtherType: 0x86dd
+
+DHCP: 6000000000003b00fe80000000000000708dfe834114a5122001000041379e508000f12ab9c82815
+Analyzed IPv6 header:
+    0110 .... = Version 6
+    .... 0000 0000 .... .... .... .... .... = Traffic Class 0x00
+    .... 0000 00.. .... .... .... .... .... = Differentiated Services Codepoint: 0
+    .... .... ..00 .... .... .... .... .... = Explicit Congestion Notification: 0
+    .... .... .... 0000 0000 0000 0000 0000 = Flow Label: 0x00000
+    Payload length: 0
+    Next header: 59
+    Hop limit: 0
+    Source: fe:80:00:00:00:00:00:00:70:8d:fe:83:41:14:a5:12
+    Destination: 20:01:00:00:41:37:9e:50:80:00:f1:2a:b9:c8:28:15
+
+DHCP: b46bfc8dcd5e0000ca11223386dd
+Analyzed EthernetII header:
+    Destination address: b4:6b:fc:8d:cd:5e
+    Source address: 00:00:ca:11:22:33
+    EtherType: 0x86dd
+
+DHCP: 6000000000003b00fe80000000000000708dfe834114a5122001000041379e508000f12ab9c82815
+Analyzed IPv6 header:
+    0110 .... = Version 6
+    .... 0000 0000 .... .... .... .... .... = Traffic Class 0x00
+    .... 0000 00.. .... .... .... .... .... = Differentiated Services Codepoint: 0
+    .... .... ..00 .... .... .... .... .... = Explicit Congestion Notification: 0
+    .... .... .... 0000 0000 0000 0000 0000 = Flow Label: 0x00000
+    Payload length: 0
+    Next header: 59
+    Hop limit: 0
+    Source: fe:80:00:00:00:00:00:00:70:8d:fe:83:41:14:a5:12
+    Destination: 20:01:00:00:41:37:9e:50:80:00:f1:2a:b9:c8:28:15
+
+DHCP: b46bfc8dcd5e0000ca11223386dd
+Analyzed EthernetII header:
+    Destination address: b4:6b:fc:8d:cd:5e
+    Source address: 00:00:ca:11:22:33
+    EtherType: 0x86dd
+
+DHCP: 6000000000003b00fe80000000000000708dfe834114a5122001000041379e508000f12ab9c82815
+Analyzed IPv6 header:
+    0110 .... = Version 6
+    .... 0000 0000 .... .... .... .... .... = Traffic Class 0x00
+    .... 0000 00.. .... .... .... .... .... = Differentiated Services Codepoint: 0
+    .... .... ..00 .... .... .... .... .... = Explicit Congestion Notification: 0
+    .... .... .... 0000 0000 0000 0000 0000 = Flow Label: 0x00000
+    Payload length: 0
+    Next header: 59
+    Hop limit: 0
+    Source: fe:80:00:00:00:00:00:00:70:8d:fe:83:41:14:a5:12
+    Destination: 20:01:00:00:41:37:9e:50:80:00:f1:2a:b9:c8:28:15
+

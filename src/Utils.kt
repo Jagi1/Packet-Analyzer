@@ -1,5 +1,8 @@
 package analizator
 
+import java.io.File
+import java.net.Socket
+import java.time.LocalDateTime
 import kotlin.math.pow
 
 val projectPath = System.getProperty("user.dir")!!
@@ -97,7 +100,7 @@ fun convertPacketBinToHex(packet: String): String =
     packet.chunked(4).joinToString { bytesToHex(it) }
 
 fun convertPacketHexToBin(packet: String): String =
-        packet.chunked(1).joinToString { hexToBytes(it) }
+    packet.chunked(1).joinToString { hexToBytes(it) }
 
 /**
  * This function checks if packet was sent is binary or hexadecimal.
@@ -107,8 +110,26 @@ fun convertPacketHexToBin(packet: String): String =
  * */
 fun checkBinOrHex(packet: String): Int {
     packet.forEach {
-        if (it == '0' || it == '1') { }
-        else return 0
+        if (it == '0' || it == '1') {
+        } else return 0
     }
     return 1
 }
+
+fun logConnection(socket: Socket) = File("$projectPath\\src\\logs\\Connections.txt").run {
+    appendText("${LocalDateTime.now()}_$socket\n", Charsets.UTF_8)
+}
+
+fun logDecoding(header: String, response: String) = File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+    appendText("DHCP: $header\n$response\n", Charsets.UTF_8)
+}
+
+fun logPacketReceived(socket: Socket, packet: String) = File("$projectPath\\src\\logs\\PacketsReceived.txt").run {
+    appendText("${socket}_$packet\n", Charsets.UTF_8)
+}
+
+fun checkProtocolVersion(version: String): Boolean =
+    when (version) {
+        "1.0" -> true
+        else -> false
+    }

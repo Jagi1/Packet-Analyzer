@@ -42,9 +42,7 @@ fun analyzeIPV6(pw: PrintWriter, header: String): String {
     response += "    Source: $source\n"
     response += "    Destination: $destination\n"
     pw.println(response)
-    File("$projectPath\\src\\logs\\HeadersSent.txt").run {
-        appendText("IPV6: $header\n$response\n", Charsets.UTF_8)
-    }
+    logDecoding(header, response)
     return when ("${header[12]}${header[13]}") {
         "3a" -> "icmpv6"
         else -> ""
