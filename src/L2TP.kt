@@ -27,20 +27,17 @@ import java.io.PrintWriter
 fun analyzeL2TP(pw: PrintWriter, header: String): Int {
     var response = "Analyzed L2TP header:\n"
     var packetFlags = hexToByteString(header.substring(0, 4))
-    val fType = packetFlags.substring(0, 1)
     val fLength = packetFlags.substring(1, 2)
     val fSequence = packetFlags.substring(4, 5)
     val fOffset = packetFlags.substring(6, 7)
-    val fPriority = packetFlags.substring(7, 8)
-    val fVersion = bytesToInt(packetFlags.substring(12, 16))
 
-    response += "    Packet Flags: $packetFlags\n"
-    response += "       Type: $fType\n" +
+    response += "    Packet Flags: $packetFlags\n" +
+                "       Type: ${packetFlags.substring(0, 1)}\n" +
                 "       Length Bit: $fLength\n" +
                 "       Sequence Bit: $fSequence\n" +
                 "       Offset bit: $fOffset\n" +
-                "       Priority: $fPriority\n" +
-                "       Version: $fVersion\n"
+                "       Priority: ${packetFlags.substring(7, 8)}\n" +
+                "       Version: ${bytesToInt(packetFlags.substring(12, 16))}\n"
     var temp = 4
     var packetLength = -1
     if (fLength == "1") {

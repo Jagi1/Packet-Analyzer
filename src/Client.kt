@@ -24,7 +24,7 @@ fun main() = Socket("localhost", 1057).run {
         return@run
     }
     // Send packet type
-    System.out.println("Specify packet type (icmp, l2tp, dns, dhcp, arp, rarp):")
+    System.out.println("Specify packet type (icmp, icmpv6, l2tp, dns, dhcp, arp, rarp):")
     pw.println("PDP:${readLine()}")
     // Get response code
     responseCode = br.readLine().split(":").last()
@@ -36,7 +36,7 @@ fun main() = Socket("localhost", 1057).run {
         return@run
     }
     // Send packet to decode
-    pw.println(ethernetII_RARP)
+    pw.println(ethernetII_PPP_IPv4_UDP_DNS)
     // Receive decoded packet
     getResponse(br)
     // Close connection

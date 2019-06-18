@@ -146,6 +146,6 @@ fun analyze4Protocol(protocol: String,length: Int, pw: PrintWriter, packet: Stri
 
 fun checkPacketType(packetType: String): Boolean =
         when (packetType) {
-            "dhcp", "l2tp", "dns", "icmp", "arp", "rarp" -> true
+            "dhcp", "l2tp", "dns", "icmp", "icmpv6", "arp", "rarp" -> true
             else -> false
         }

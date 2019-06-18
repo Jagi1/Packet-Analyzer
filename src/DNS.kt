@@ -9,16 +9,6 @@ import java.io.PrintWriter
  * DNS header structure:
  *   Transaction ID ------------------- 2 bytes
  *   Flags ---------------------------- 2 bytes
- *      Response: Message is a response
- *      Opcode: Standard query (0)
- *      Authoritative: Server is not an authority for domain
- *      Truncated: Message is not truncated
- *      Recursion desired: Do query recursively
- *      Recursion available: Server can do recursive queries
- *      Z: reserved (0)
- *      Answer authenticated: Answer/authority portion was not authenticated by the server
- *      Non-authenticated data: Unacceptable
- *      Reply code: No error (0)
  *   Question Count -------------------- 2 bytes
  *   Answer Count ---------------------- 2 bytes
  *   Authority Count ------------------- 2 bytes
@@ -29,37 +19,60 @@ import java.io.PrintWriter
  *   Additionals ----------------------- (value from Additional Count) bytes
  * */
 
+// only DNS Query has more details
 fun analyzeDNS(pw: PrintWriter, header: String, length: Int): Int {
     var response = "Analyzed DNS header:\n"
     var tranID = "0x" + header.substring(0, 4)
-    val flags = header.substring(4, 8)
+    var flags = header.substring(4, 8)
+    val bFlags = hexToByteString(flags)
+    flags = "Flags: 0x$flags\n" +
+            "      Response: ${bFlags.substring(0, 1)}\n" +
+            "      Opcode: ${bFlags.substring(1, 5)}\n" +
+            "      Authoritative: ${bFlags.substring(5, 6)}\n" +
+            "      Truncated: ${bFlags.substring(6, 7)}\n" +
+            "      Recursion desired: ${bFlags.substring(7, 8)}\n" +
+            "      Recursion available: ${bFlags.substring(8, 9)}\n" +
+            "      Z: ${bFlags.substring(9, 10)}\n" +
+            "      Answer authenticated: ${bFlags.substring(10, 11)}\n" +
+            "      Non-authenticated data: ${bFlags.substring(11, 12)}\n" +
+            "      Reply code: ${bFlags.substring(12, 16)}"
+
     val questionCount = header.substring(8, 12).toInt(16)
     val answerCount = header.substring(12, 16).toInt(16)
     val authorityCount = header.substring(16, 20).toInt(16)
     val additionalCount = header.substring(20, 24).toInt(16)
-    var question = ""
+    var data = header.substring(24)
 
+    // length from analyze UDP
     if(length != -1){
-        val DNSQueryLength = length - 8 - 16 // UDP header length is always 8 bytes, for DNS query is 16 bytes to subtract
-        question = hexToASCII(header.substring(24, 24 + DNSQueryLength*2))
-//    var temp = 20 + questionCount
+        val DNSQueryNameSignsCount = (length - 8 - 16) * 2 // UDP header length is always 8 bytes, for DNS query is 16 bytes to subtract
+        val questionName = hexToASCII(data.substring(0, DNSQueryNameSignsCount))
+        val questionType = data.substring(DNSQueryNameSignsCount, DNSQueryNameSignsCount+4)
+        val DNSQueryEnd = DNSQueryNameSignsCount+8
+        val questionClass = data.substring(DNSQueryNameSignsCount+4, DNSQueryEnd)
+        data = "Queries:\n" +
+                "       Name: $questionName\n" +
+                "       Type: 0x$questionType\n" +
+                "       Class: 0x$questionClass\n" +
+                "   Rest of data: ${data.substring(DNSQueryEnd)}"
+//    var temp = question.length + questionCount
 //    val answer = header.substring(temp, temp + answerCount)
 //    temp += answerCount
 //    val authority = header.substring(temp, temp + authorityCount)
 //    temp += authorityCount
 //    val additional = header.substring(temp, temp + additionalCount)
+//    data += "   Answers: $answer\n"
+//    data += "   Authoritative: $authority\n"
+//    data += "   Additionals: $additional\n"
     }
 
     response += "   Transaction ID: $tranID\n"
-    response += "   Flags: $flags\n"
+    response += "   $flags\n"
     response += "   Question Count: $questionCount\n"
     response += "   Answer Count: $answerCount\n"
     response += "   Authority Count: $authorityCount\n"
     response += "   Additional Count: $additionalCount\n"
-    response += "   Queries: $question\n"
-//    response += "   Answers: $answer\n"
-//    response += "   Authoritative: $authority\n"
-//    response += "   Additionals: $additional\n"
+    response += "   $data\n"
     pw.println(response)
     logDecoding(header, response)
     return 1

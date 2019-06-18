@@ -58,25 +58,25 @@ fun main() = ServerSocket(1057).run {
                 // Decide which protocol should be decoded next
                 when (layer3Protocol) {
                     "ipv4" -> {
-                        when (analyzeIPV4(pw, packet.substring(28, 68))) {
-                            "tcp" -> {
-                                analyzeTCP(pw, packet.substring(68, 108))
-                                analyze4Protocol(packetType, -1, pw, packet.substring(108))
-                            }
-                            "udp" -> {
-                                val length = analyzeUDP(pw, packet.substring(68, 84))
-                                analyze4Protocol(packetType, length, pw, packet.substring(84))
-                            }
-                            "icmp" -> {
-                                analyzeICMP(pw, packet.substring(68))
-                            }
-                        }
+                        ipv4(pw, packet.substring(28), packetType)
                     }
                     "ipv6" -> {
                         val layer4Protocol = analyzeIPV6(pw, packet.substring(28, 108))
-                        analyze4Protocol(packetType, -1, pw, packet.substring(108))
+                        when (layer4Protocol) {
+                            "icmpv6" -> {
+                                analyzeICMPv6(pw, packet.substring(108))
+                            }
+                            else -> analyze4Protocol(packetType, -1, pw, packet.substring(108))
+                        }
                     }
                     "arp", "rarp" -> analyzeARP(pw, packet.substring(28, 120))
+                    "ppp" -> {
+                        when(analyzePPP(pw, packet.substring(28, 44))) {
+                            "ipv4" -> {
+                                ipv4(pw, packet.substring(44), packetType)
+                            }
+                        }
+                    }
                 }
                 // Closing connection
                 pw.println("PDP:END")
@@ -84,6 +84,22 @@ fun main() = ServerSocket(1057).run {
                 br.close()
                 socket.close()
             }
+        }
+    }
+}
+
+fun ipv4(pw: PrintWriter, packet: String, packetType: String){
+    when (analyzeIPV4(pw, packet.substring(0, 40))) {
+        "tcp" -> {
+            analyzeTCP(pw, packet.substring(40, 80))
+            analyze4Protocol(packetType, -1, pw, packet.substring(80))
+        }
+        "udp" -> {
+            val length = analyzeUDP(pw, packet.substring(40, 56))
+            analyze4Protocol(packetType, length, pw, packet.substring(56))
+        }
+        "icmp" -> {
+            analyzeICMP(pw, packet.substring(40))
         }
     }
 }

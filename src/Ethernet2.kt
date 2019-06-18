@@ -15,16 +15,18 @@ fun analyzeEthernetII(pw: PrintWriter, header: String): String {
     var response = "Analyzed EthernetII header:\n"
     val dAddress = header.substring(0, 12).chunked(2).joinToString(separator = ":")
     val sAddress = header.substring(12, 24).chunked(2).joinToString(separator = ":")
-    val etherType = header.substring(24, 28)
-    response += "    Destination address: $dAddress\n"
-    response += "    Source address: $sAddress\n"
-    response += "    EtherType: 0x$etherType\n"
-    pw.println(response)
-    logDecoding(header, response)
-    return when (etherType) {
+    val etherTypeID = header.substring(24, 28)
+    val etherType = when (etherTypeID) {
         "0800" -> "ipv4"
         "86dd" -> "ipv6"
         "0806" -> "arp"
+        "8864" -> "ppp"
         else -> ""
     }
+    response += "    Destination address: $dAddress\n"
+    response += "    Source address: $sAddress\n"
+    response += "    EtherType: 0x$etherTypeID ($etherType)\n"
+    pw.println(response)
+    logDecoding(header, response)
+    return etherType
 }
