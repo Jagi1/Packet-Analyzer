@@ -31,7 +31,10 @@ PDP:END
 ======================================================================
 4. Kody zwrotne.
 20 - dana wersja protokołu jest wspierana przez serwer
+20 - deklarowany protokół do zdekodowania jest obsługiwany
 30 - dana wersja protokołu nie jest wspierana przez serwer
+31 - deklarowany protokół do zdekodowania jest nieobsługiwany
+32 - wystąpił nieoczekiwany błąd
 ======================================================================
 5. Przykładowa komunikacja.
 Klient -> Serwer
