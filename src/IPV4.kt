@@ -66,6 +66,7 @@ fun analyzeIPV4(pw: PrintWriter, header: String): String {
     return when (protocol) {
         "17" -> "udp"
         "6" -> "tcp"
+        "1" -> "icmp"
         else -> ""
     }
 }

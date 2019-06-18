@@ -7,6 +7,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.net.ServerSocket
+import java.net.SocketException
 import java.nio.charset.Charset
 import java.time.LocalDateTime
 
@@ -30,7 +31,18 @@ fun main() = ServerSocket(1057).run {
                     else -> pw.println("PDP:30").also {
                         pw.close()
                         br.close()
-                        close()
+                        socket.close()
+                        return@launch
+                    }
+                }
+                // Packet type
+                var packetType = br.readLine().split(":").last().toLowerCase()
+                when (checkPacketType(packetType.toLowerCase())) {
+                    true -> pw.println("PDP:21")
+                    else -> pw.println("PDP:31").also {
+                        pw.close()
+                        br.close()
+                        socket.close()
                         return@launch
                     }
                 }
@@ -47,17 +59,24 @@ fun main() = ServerSocket(1057).run {
                 when (layer3Protocol) {
                     "ipv4" -> {
                         when (analyzeIPV4(pw, packet.substring(28, 68))) {
-                            "tcp" -> analyzeTCP(pw, packet.substring(68, 108))
-                            "udp" -> analyzeUDP(pw, packet.substring(68, 84))
+                            "tcp" -> {
+                                analyzeTCP(pw, packet.substring(68, 108))
+                                analyze4Protocol(packetType, -1, pw, packet.substring(108))
+                            }
+                            "udp" -> {
+                                val length = analyzeUDP(pw, packet.substring(68, 84))
+                                analyze4Protocol(packetType, length, pw, packet.substring(84))
+                            }
+                            "icmp" -> {
+                                analyzeICMP(pw, packet.substring(68))
+                            }
                         }
                     }
                     "ipv6" -> {
                         val layer4Protocol = analyzeIPV6(pw, packet.substring(28, 108))
-//                when (layer4Protocol) {
-//                    "icmpv6" -> analyzeICMPV6(pw, datagram.substring(68, ?))
-//                }
+                        analyze4Protocol(packetType, -1, pw, packet.substring(108))
                     }
-                    "arp" -> analyzeARP(pw, packet.substring(28, 120))
+                    "arp", "rarp" -> analyzeARP(pw, packet.substring(28, 120))
                 }
                 // Closing connection
                 pw.println("PDP:END")

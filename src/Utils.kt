@@ -1,6 +1,7 @@
 package analizator
 
 import java.io.File
+import java.io.PrintWriter
 import java.net.Socket
 import java.time.LocalDateTime
 import kotlin.math.pow
@@ -121,7 +122,7 @@ fun logConnection(socket: Socket) = File("$projectPath\\src\\logs\\Connections.t
 }
 
 fun logDecoding(header: String, response: String) = File("$projectPath\\src\\logs\\HeadersSent.txt").run {
-    appendText("DHCP: $header\n$response\n", Charsets.UTF_8)
+    appendText("Packet: $header\n$response\n", Charsets.UTF_8)
 }
 
 fun logPacketReceived(socket: Socket, packet: String) = File("$projectPath\\src\\logs\\PacketsReceived.txt").run {
@@ -133,3 +134,18 @@ fun checkProtocolVersion(version: String): Boolean =
         "1.0" -> true
         else -> false
     }
+
+fun analyze4Protocol(protocol: String,length: Int, pw: PrintWriter, packet: String) = when (protocol) {
+    "dhcp" -> analyzeDHCP(pw, packet)
+    "dns" -> analyzeDNS(pw, packet, length)
+    "l2tp" -> analyzeL2TP(pw, packet)
+    else -> {
+        pw.println("PDP:31")
+    }
+}
+
+fun checkPacketType(packetType: String): Boolean =
+        when (packetType) {
+            "dhcp", "l2tp", "dns", "icmp", "arp", "rarp" -> true
+            else -> false
+        }

@@ -16,16 +16,27 @@ fun main() = Socket("localhost", 1057).run {
     // Init connection
     pw.println("PDP:INIT:1.0")
     // Get response code
-    val responseCode = br.readLine().split(":").last()
+    var responseCode = br.readLine().split(":").last()
     if (responseCode == "30") {
         pw.close()
         br.close()
         close()
         return@run
     }
+    // Send packet type
+    System.out.println("Specify packet type (icmp, l2tp, dns, dhcp, arp, rarp):")
+    pw.println("PDP:${readLine()}")
+    // Get response code
+    responseCode = br.readLine().split(":").last()
+    if (responseCode == "31") {
+        System.out.println("Unsupported protocol. Ending communication...")
+        pw.close()
+        br.close()
+        close()
+        return@run
+    }
     // Send packet to decode
-//    pw.println(ethernetII_IPV4_TCP)
-    pw.println(ethernetII_IPV6_bin)
+    pw.println(ethernetII_RARP)
     // Receive decoded packet
     getResponse(br)
     // Close connection

@@ -64,12 +64,3 @@ fun analyzeDNS(pw: PrintWriter, header: String, length: Int): Int {
     logDecoding(header, response)
     return 1
 }
-
-
-//fun main() {
-//    val header = "00010800060400015254001234560a00020f0000000000000a000205"
-//    val test = header.substring(28, 36)
-//    println(test)
-//    val result2 = test.chunked(2).map { it.toInt(16) }.joinToString(separator = ".")
-//    println(result2)
-//}
