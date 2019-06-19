@@ -70,38 +70,35 @@ fun bytesToHex(bytes: String): String =
         else -> "f"
     }
 
-fun hexToByteString(hexStr: String): String {
-    val output = StringBuilder("")
+/**
+ * Convert hexadecimal value into bytes.
+ * */
+fun hexToByteString(hexStr: String): String = StringBuilder("").run {
     var i = 0
     while (i < hexStr.length) {
-        output.append(hexToBytes(hexStr.substring(i, i + 1)))
+        append(hexToBytes(hexStr.substring(i, i + 1)))
         i += 1
     }
-
-    return output.toString()
+    return this.toString()
 }
 
-fun hexToASCII(hexStr: String): String {
-    val output = StringBuilder("")
-
+/**
+ * Convert hexadecimal value into ASCII.
+ * */
+fun hexToASCII(hexStr: String): String = StringBuilder("").run {
     var i = 0
     while (i < hexStr.length) {
         val str = hexStr.substring(i, i + 2)
-        output.append(Integer.parseInt(str, 16).toChar())
+        append(Integer.parseInt(str, 16).toChar())
         i += 2
     }
-
-    return output.toString()
+    return this.toString()
 }
 
 /**
  * Converts [packet] from binary type to hexadecimal type.
  * */
-fun convertPacketBinToHex(packet: String): String =
-    packet.chunked(4).joinToString { bytesToHex(it) }
-
-fun convertPacketHexToBin(packet: String): String =
-    packet.chunked(1).joinToString { hexToBytes(it) }
+fun convertPacketBinToHex(packet: String): String = packet.chunked(4).joinToString { bytesToHex(it) }
 
 /**
  * This function checks if packet was sent is binary or hexadecimal.
@@ -109,33 +106,48 @@ fun convertPacketHexToBin(packet: String): String =
  * - 0 - packet is hexadecimal type
  * - 1 - packet is binary type
  * */
-fun checkBinOrHex(packet: String): Int {
-    packet.forEach {
-        if (it == '0' || it == '1') {
-        } else return 0
+fun checkBinOrHex(packet: String): Int = packet.run {
+    forEach {
+        if (it == '0' || it == '1') { }
+        else return 0
     }
     return 1
 }
 
+/**
+ * Log connection event from [socket] into [File].
+ * */
 fun logConnection(socket: Socket) = File("$projectPath\\src\\logs\\Connections.txt").run {
     appendText("${LocalDateTime.now()}_$socket\n", Charsets.UTF_8)
 }
 
+/**
+ * Log decoding event of protocol [header].
+ * */
 fun logDecoding(header: String, response: String) = File("$projectPath\\src\\logs\\HeadersSent.txt").run {
     appendText("Packet: $header\n$response\n", Charsets.UTF_8)
 }
 
+/**
+ * Log received [packet] from [socket].
+ * */
 fun logPacketReceived(socket: Socket, packet: String) = File("$projectPath\\src\\logs\\PacketsReceived.txt").run {
     appendText("${socket}_$packet\n", Charsets.UTF_8)
 }
 
+/**
+ * Check if [version] of protocol is supported.
+ * */
 fun checkProtocolVersion(version: String): Boolean =
     when (version) {
         "1.0" -> true
         else -> false
     }
 
-fun analyze4Protocol(protocol: String,length: Int, pw: PrintWriter, packet: String) = when (protocol) {
+/**
+ * Analyze one of the protocols of 5-7 OSI layer.
+ * */
+fun analyze4Protocol(protocol: String, length: Int, pw: PrintWriter, packet: String) = when (protocol) {
     "dhcp" -> analyzeDHCP(pw, packet)
     "dns" -> analyzeDNS(pw, packet, length)
     "l2tp" -> analyzeL2TP(pw, packet)
@@ -144,8 +156,11 @@ fun analyze4Protocol(protocol: String,length: Int, pw: PrintWriter, packet: Stri
     }
 }
 
+/**
+ * Check if this [packetType] is supported by server.
+ * */
 fun checkPacketType(packetType: String): Boolean =
-        when (packetType) {
-            "dhcp", "l2tp", "dns", "icmp", "icmpv6", "arp", "rarp" -> true
-            else -> false
-        }
+    when (packetType) {
+        "dhcp", "l2tp", "dns", "icmp", "icmpv6", "arp", "rarp" -> true
+        else -> false
+    }
