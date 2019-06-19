@@ -36,7 +36,7 @@ fun main() = Socket("localhost", 1057).run {
         return@run
     }
     // Send packet to decode
-    pw.println(ethernetII_PPP_IPv4_UDP_DNS)
+    pw.println(ethernetII_IPv6_UDP_DNS)
     // Receive decoded packet
     getResponse(br)
     // Close connection
@@ -50,8 +50,14 @@ fun main() = Socket("localhost", 1057).run {
  * */
 fun getResponse(br: BufferedReader) {
     var line: String? = br.readLine()
+    var lastLine = ""
     while (line != null) {
+        lastLine = line
         System.out.println(line)
         line = br.readLine()
+    }
+    when (lastLine){
+        "PDP:31" -> {System.out.println("Unsupported protocol.")}
+        "PDP:32" -> {System.out.println("Unexpected error.")}
     }
 }

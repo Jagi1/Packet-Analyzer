@@ -30,9 +30,8 @@ fun main() = ServerSocket(1057).run {
                     val protocolVersion = br.readLine().split(":").last()
                     when (checkProtocolVersion(protocolVersion)) {
                         true -> pw.println("PDP:20")
-                        else -> pw.println("PDP:30").also {
-                            pw.close()
-                            br.close()
+                        else -> {
+                            closeConnection("PDP:30", pw, br)
                             socket.close()
                             return@launch
                         }
@@ -41,9 +40,8 @@ fun main() = ServerSocket(1057).run {
                     var packetType = br.readLine().split(":").last().toLowerCase()
                     when (checkPacketType(packetType.toLowerCase())) {
                         true -> pw.println("PDP:21")
-                        else -> pw.println("PDP:31").also {
-                            pw.close()
-                            br.close()
+                        else -> {
+                            closeConnection("PDP:31", pw, br)
                             socket.close()
                             return@launch
                         }
@@ -68,6 +66,10 @@ fun main() = ServerSocket(1057).run {
                                 "icmpv6" -> {
                                     analyzeICMPv6(pw, packet.substring(108))
                                 }
+                                "udp" -> {
+                                    val length = analyzeUDP(pw, packet.substring(108, 124))
+                                    analyze4Protocol(packetType, length, pw, packet.substring(124))
+                                }
                                 else -> analyze4Protocol(packetType, -1, pw, packet.substring(108))
                             }
                         }
@@ -77,18 +79,24 @@ fun main() = ServerSocket(1057).run {
                                 "ipv4" -> {
                                     ipv4(pw, packet.substring(44), packetType)
                                 }
+                                else -> {
+                                    closeConnection("PDP:32", pw, br)
+                                    socket.close()
+                                    return@launch
+                                }
                             }
+                        }
+                        else -> {
+                            closeConnection("PDP:32", pw, br)
+                            socket.close()
+                            return@launch
                         }
                     }
                     // Closing connection
-                    pw.println("PDP:END")
-                    pw.close()
-                    br.close()
+                    closeConnection("PDP:END", pw, br)
                     socket.close()
                 } catch (e: Exception) {
-                    pw.println("PDP:32")
-                    pw.close()
-                    br.close()
+                    closeConnection("PDP:32", pw, br)
                     socket.close()
                     return@launch
                 }
@@ -111,4 +119,11 @@ fun ipv4(pw: PrintWriter, packet: String, packetType: String){
             analyzeICMP(pw, packet.substring(40))
         }
     }
+}
+
+fun closeConnection(message: String, pw: PrintWriter, br: BufferedReader)
+{
+    pw.println(message)
+    pw.close()
+    br.close()
 }

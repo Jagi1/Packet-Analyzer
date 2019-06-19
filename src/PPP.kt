@@ -19,6 +19,7 @@ fun analyzePPP(pw: PrintWriter, header: String): String {
     val protocolID = header.substring(12)
     val protocol = when (protocolID) {
         "0021" -> "ipv4"
+        "0057" -> "ipv6"
         else -> ""
     }
     var response = "Analyzed Point-to-Point Protocol header:\n" +

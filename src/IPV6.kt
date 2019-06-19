@@ -45,6 +45,7 @@ fun analyzeIPV6(pw: PrintWriter, header: String): String {
     logDecoding(header, response)
     return when ("${header[12]}${header[13]}") {
         "3a" -> "icmpv6"
+        "11" -> "udp"
         else -> ""
     }
 }
