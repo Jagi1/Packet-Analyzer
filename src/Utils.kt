@@ -118,6 +118,7 @@ fun checkBinOrHex(packet: String): Int = packet.run {
  * Log connection event from [socket] into [File].
  * */
 fun logConnection(socket: Socket) = File("$projectPath\\src\\logs\\Connections.txt").run {
+    if (!exists()) createNewFile()
     appendText("${LocalDateTime.now()}_$socket\n", Charsets.UTF_8)
 }
 
@@ -125,6 +126,7 @@ fun logConnection(socket: Socket) = File("$projectPath\\src\\logs\\Connections.t
  * Log decoding event of protocol [header].
  * */
 fun logDecoding(header: String, response: String) = File("$projectPath\\src\\logs\\HeadersSent.txt").run {
+    if (!exists()) createNewFile()
     appendText("Packet: $header\n$response\n", Charsets.UTF_8)
 }
 
@@ -132,6 +134,7 @@ fun logDecoding(header: String, response: String) = File("$projectPath\\src\\log
  * Log received [packet] from [socket].
  * */
 fun logPacketReceived(socket: Socket, packet: String) = File("$projectPath\\src\\logs\\PacketsReceived.txt").run {
+    if (!exists()) createNewFile()
     appendText("${socket}_$packet\n", Charsets.UTF_8)
 }
 
