@@ -1,5 +1,4 @@
-package analizator
-
+import analizator.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
@@ -8,16 +7,18 @@ import java.io.InputStreamReader
 import java.io.PrintWriter
 import java.lang.Exception
 import java.net.ServerSocket
-import java.net.SocketException
-import java.nio.charset.Charset
-import java.time.LocalDateTime
 
 /**
  * After establishing connection with client, packet is received with [BufferedReader].
  * First decoded header is EthernetII in [analyzeEthernetII] method. This method return type of next header
  * which is decoded with another method. Same process is repeated until all headers have been decoded.
  * */
-fun main() = ServerSocket(1057).run {
+fun runServer() = ServerSocket(1057).run {
+    with(File("$projectPath\\src\\logs")) {
+        if (!exists()) {
+            mkdir()
+        }
+    }
     while (true) {
         accept()?.let { socket ->
             // Create task that will be handled by another thread
